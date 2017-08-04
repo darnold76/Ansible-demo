@@ -1,6 +1,6 @@
 ---
 # This playbook installs Apache
-- name: install and start apache
+- name: install and start postgresql
   hosts: database
   vars:
     psql_user: db_user
