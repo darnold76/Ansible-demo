@@ -42,7 +42,7 @@
         postgresql-setup initdb
       become: yes
       become_user: postgres
-      when: pgdata_dir_exist.changed
+      # when: pgdata_dir_exist.changed
 
     - name: start PostGreSQL
       service: name=postgresql state=started enabled=yes
