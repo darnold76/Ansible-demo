@@ -4,7 +4,7 @@
   hosts: web
   vars:
     http_port: 80
-    http_uesr: apache
+    http_user: apache
   remote_user: root
 
 
