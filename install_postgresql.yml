@@ -9,8 +9,40 @@
 
 
   tasks:
-    - name: install PostGreSQL
-      yum: pkg=postgresql-server state=present
+    - name: PostgreSQL | Make sure the dependencies are installed
+      yum:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - "python-psycopg2"
+        - "python-pycurl"
+        - "glibc-common"
+
+    - name: PostgreSQL | Install PostgreSQL
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - "postgresql-server"
+        - "postgresql"
+        - "postgresql-contrib"
+
+    - name: PostgreSQL | Make sure the postgres data directory exists
+      file:
+        path: "/var/lib/pgsql/data"
+        owner: "postgres"
+        group: "postgres"
+        state: directory
+        mode: 0700
+      register: pgdata_dir_exist
+
+    - name: PostgreSQL | Initialize the database | RedHat
+      command: >
+        postgresql-setup initdb
+      become: yes
+      become_user: postgres
+      when: pgdata_dir_exist.changed
 
     - name: start PostGreSQL
       service: name=postgresql state=started enabled=yes
