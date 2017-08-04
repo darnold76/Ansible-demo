@@ -13,7 +13,7 @@
       yum: pkg=postgresql-server state=present
 
     - name: start PostGreSQL
-      service: name=httpd state=running enabled=yes
+      service: name=postgresql state=running enabled=yes
 
     - name: Add a database
       postgresql_db:
@@ -21,4 +21,3 @@
         state: present
       become_user: postgres
       become: true
-
