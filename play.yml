@@ -1,14 +1,12 @@
 ---
 # This is a comment
 - name: install and start apache
-  hosts: rhel
+  hosts: centos
   remote_user: root
   vars:
     foobar: "This is some text"
     tempdest: "/root/somefile.txt"
   tasks:
-    #- name: install httpd
-    #yum: pkg=httpd state=present
 
     - name: Lay down template file
       template:
@@ -17,6 +15,3 @@
         owner: root
         group: root
         mode: 0600
-
-        #- name: start httpd
-        #service: name=httpd state=running

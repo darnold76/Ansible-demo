@@ -1,0 +1,25 @@
+---
+# This playbook installs Apache
+- name: install and start apache
+  hosts: web
+  vars:
+    http_port: 80
+    http_uesr: apache
+  remote_user: root
+
+
+  tasks:
+    - name: install httpd
+      yum: pkg=httpd state=present
+
+    - name: write the apache config file
+      template: src=templates/httpd.j2 dest=/etc/httpd/conf/httpd.conf
+      notify:
+        - restart apache
+
+    - name: start httpd
+      service: name=httpd state=running
+
+  handlers:
+    - name: restart apache
+      service: name=httpd state=restarted
