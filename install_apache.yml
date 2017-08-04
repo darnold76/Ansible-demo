@@ -18,7 +18,7 @@
         - restart apache
 
     - name: start httpd
-      service: name=httpd state=running
+      service: name=httpd state=started
 
   handlers:
     - name: restart apache
