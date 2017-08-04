@@ -1,6 +1,6 @@
 ---
 # This playbook installs MySQL
-- name: install and start MySQL
+- name: install and start MySQL (mariadb)
   hosts: database
   vars:
     sql_user: db_user
@@ -10,7 +10,7 @@
 
   tasks:
 
-    - name: Install MySQL
+    - name: Install MySQL (mariadb)
       yum:
         name: "{{ item }}"
         state: present
@@ -27,9 +27,9 @@
         - MySQL-python
         - perl-DBD-MySQL
 
-    - name: Start and enable MySQL
+    - name: Start and enable MySQL (mariadb)
       service:
-        name: mysqld
+        name: mariadb
         state: started
         enabled: "Yes"
 
