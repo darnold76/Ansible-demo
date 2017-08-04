@@ -1,0 +1,12 @@
+  vars:
+    foobar: "This is some text"
+
+
+    - name: Lay down template file
+      template:
+        src: templates/sometemplate.j2
+        dest: /root/myfile.txt
+        owner: root
+        group: root
+        mode: 0600
+

@@ -1,0 +1,26 @@
+---
+
+##### Ansible
+
+- hosts: *
+  vars:
+    - toplevel_timeservers: ['pool.ntp.org']
+    - ntp_netdevice: 'eth0'
+
+  tasks:
+    - name: Install NTP
+      package: package=ntp state=present update_cache=yes
+  
+    - name: Copy over the NTP configuration
+      template: src=ntp.conf dest=/etc/ntp.conf
+      notify:
+        - restart ntp
+    
+    - name: Make sure NTP is started up
+      service: name=ntpd state=started enabled=yes
+
+  handlers:
+    - name: restart ntp
+      service: name=ntpd state=restarted
+  
+# vim: ft=ansible
