@@ -5,6 +5,7 @@
   vars:
     http_port: 80
     http_user: apache
+    comment: "some text here"
   remote_user: root
 
 
