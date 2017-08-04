@@ -1,0 +1,24 @@
+---
+# This playbook installs Apache
+- name: install and start apache
+  hosts: database
+  vars:
+    psql_user: db_user
+    psql_pass: secret_password
+  remote_user: root
+
+
+  tasks:
+    - name: install PostGreSQL
+      yum: pkg=postgresql-server state=present
+
+    - name: start PostGreSQL
+      service: name=httpd state=running enabled=yes
+
+    - name: Add a database
+      postgresql_db:
+        name: demo_db
+        state: present
+      become_user: postgres
+      become: true
+
