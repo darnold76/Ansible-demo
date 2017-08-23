@@ -4,7 +4,7 @@
   hosts: centos
   remote_user: root
   vars:
-    foobar: "{{ ansible_fqdn }}"
+    foobar: "This is some text"
     tempdest: "/root/somefile.txt"
   tasks:
 
