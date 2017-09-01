@@ -23,13 +23,13 @@
       nmcli:
         conn_name: eth0
         type: ethernet
-        dns4:  "192.168.200.1 8.8.8.8"
+        dns4: "192.168.200.1 8.8.8.8"
         state: present
 
     - name: Add our custom host in hostfile
       lineinfile:
         path: /etc/hosts
-        regex: '^172\.217\.9\.46`'
+        regexp: '^172\.217\.9\.46`'
         line: '172.217.9.46 google.com'
 
     - name: Install Apache and mod_php
