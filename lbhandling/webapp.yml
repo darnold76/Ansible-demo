@@ -77,6 +77,7 @@
     - name: Drop out of Load Balancer
       haproxy:
         state: disabled
+        backend: web
         host: "{{ ansible_hostname }}"
         socket: /var/lib/haproxy/stats
         wait: Yes
@@ -93,6 +94,7 @@
     - name: Add back into Load Balancer
       haproxy:
         state: enabled
+        backend: web
         host: "{{ ansible_hostname }}"
         socket: /var/lib/haproxy/stats
         wait: Yes
