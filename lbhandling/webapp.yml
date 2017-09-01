@@ -14,17 +14,23 @@
     allow_override: None
   tasks:
 
-    - name: ensure NetworkManager utils are installed
-      yum:
-        name: NetworkManager-glib
-        state: present
+    - name: Add DNS1 to file
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        regexp: '^DNS1'
+        line: 'DNS1=192.168.200.1'
+        insertafter: '^ONBOOT'
+      notify:
+        - restart NM
 
-    - name: Set DNS via NetworkManager
-      nmcli:
-        conn_name: eth0
-        type: ethernet
-        dns4: 8.8.8.8
-        state: present
+    - name: Add DNS2 to file
+      lineinfile:
+        path: /etc/sysconfig/network-scripts/ifcfg-eth0
+        regexp: '^DNS2'
+        line: 'DNS2=8.8.8.8'
+        insertafter: '^DNS1'
+      notify:
+        - restart NM
 
     - name: Add our custom host in hostfile
       lineinfile:
@@ -73,6 +79,13 @@
         state: started
 
   handlers:
+
+    - name: restart NM
+      service:
+        name: NetworkManager
+        state: restarted
+      listen: "restart NM"
+
     - name: Drop out of Load Balancer
       haproxy:
         state: disabled
