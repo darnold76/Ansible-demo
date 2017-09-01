@@ -14,6 +14,11 @@
     allow_override: None
   tasks:
 
+    - name: ensure NetworkManager utils are installed
+      yum:
+        name: NetworkManager-glib
+        state: present
+
     - name: Set DNS via NetworkManager
       nmcli:
         conn_name: eth0
