@@ -23,7 +23,9 @@
       nmcli:
         conn_name: eth0
         type: ethernet
-        dns4: "['192.168.200.1','8.8.8.8']"
+        dns4:
+          - 192.168.200.1
+          - 8.8.8.8
         state: present
 
     - name: Add our custom host in hostfile
