@@ -59,6 +59,7 @@
         service: http
         permanent: True
         state: enabled
+      notify: firewall reload
 
     - name: Verify Apache is running.
       service:
@@ -67,6 +68,11 @@
         state: started
 
   handlers:
+
+    - name: firewall reload
+      service:
+        name: firewalld
+        state: reloaded
 
     - name: Drop out of Load Balancer
       haproxy:
