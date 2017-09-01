@@ -54,6 +54,12 @@
         group: root
         mode: 0644
 
+    - name: Get correct firewall rules in place
+      firewalld:
+        service: http
+        permanent: True
+        state: enabled
+
     - name: Verify Apache is running.
       service:
         name: httpd
