@@ -1,0 +1,27 @@
+<html>
+ <head>
+  <title>Test Page</title>
+ </head>
+ <body>
+ <?php
+        $hostname = gethostname();
+        echo "<p>Hello! You are connected to $hostname </p>";
+
+        echo "<p>Here are the contents of /etc/resolv.conf, /etc/hosts, and /etc/httpd/conf/httpd.conf:</p>";
+
+        echo "-- resolv.conf --<br>";
+        echo nl2br (file_get_contents( "/etc/resolv.conf" ));
+        echo "<br>";
+
+        echo "-- hosts --<br>";
+        echo nl2br ( file_get_contents( "/etc/hosts" ));
+        echo "<br>";
+
+        echo "-- httpd.conf --<br>";
+        echo nl2br (`cat /etc/http/conf/httpd.conf | grep AllowOverride`);
+        echo "<br>";
+
+
+ ?>
+ </body>
+</html>

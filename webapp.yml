@@ -1,0 +1,100 @@
+---
+# This playbook will set up a simple web application. If a change happens to
+# the Apache configuration, then we pull it out of the load balancer before
+# restarting Apache
+
+# We want to gather information for the load balancers, so we can refer to it.
+- hosts: loadbalancer
+  tasks: [] # Empty task list.
+
+# We target the web group to deploy our application
+- hosts: web
+  vars:
+    http_port: 80
+    allow_override: None
+  tasks:
+
+    - name: Set DNS via NetworkManager
+      nmcli:
+        conn_name: eth0
+        ifname: eth0
+        dns4:
+          - 192.168.200.1
+          - 8.8.8.8
+          - 8.8.4.4
+        state: present
+
+    - name: Add our custom host in hostfile
+      lineinfile:
+        path: /etc/hosts
+        regex: '^172\.217\.9\.46`'
+        line: '172.217.9.46 google.com'
+
+    - name: Install Apache and mod_php
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - httpd
+        - mod_php
+
+    - name: Lay down correct config
+      template:
+        src: lbhandling/templates/httpd.conf.j2
+        dst: /etc/httpd/conf/httpd.conf
+        owner: root
+        group: root
+        mode: 0644
+      notify:
+          - restart app server
+
+    - name: deploy simple index file
+      template:
+        src: lbhandling/templates/index.html.j2
+        dst: /var/www/htmp/index.html
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: deploy application
+      template:
+        src: lbhandling/templates/app.php.j2
+        dst: /var/www/htmp/app.php
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Verify Apache is running.
+      service:
+        name: httpd
+        enabled: Yes
+        state: started
+
+    handlers:
+      - name: Drop out of Load Balancer
+        haproxy:
+          state: disabled
+          backend: web
+          host: "{{ ansible_hostname }}"
+          socket: /var/lib/haproxy/stats
+          wait: Yes
+        delegate_to: "{{ item }}"
+        with_items: groups.loadbalancer
+        listen: "restart app server"
+
+      - name: Restart Apache
+        service:
+          name: httpd
+          state: restarted
+        listen: "restart app server"
+
+      - name: Add back into Load Balancer
+        haproxy:
+          state: enabled
+          backend: web
+          host: "{{ ansible_hostname }}"
+          socket: /var/lib/haproxy/stats
+          wait: Yes
+        delegate_to: "{{ item }}"
+        with_items: groups.loadbalancer
+        listen: "restart app server"

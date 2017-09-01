@@ -1,0 +1,9 @@
+---
+- name: create SSH service
+  panos_service:
+    username: "admin"
+    password: "admin"
+    ip_address: '{{ inventory_hostname }}'
+    service_name: "service-tcp-22"
+    protocol: "tcp"
+    port: "22"
