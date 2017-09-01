@@ -35,8 +35,8 @@
     - name: Add our custom host in hostfile
       lineinfile:
         path: /etc/hosts
-        regexp: '^172\.217\.9\.46`'
         line: '172.217.9.46 google.com'
+        state: present
 
     - name: Install Apache and mod_php
       yum:
