@@ -18,7 +18,7 @@
         echo "<br>";
 
         echo "-- httpd.conf --<br>";
-        echo nl2br (`cat /etc/http/conf/httpd.conf | grep AllowOverride`);
+        echo nl2br ( file_get_contents( "/etc/httpd/conf/httpd.conf"));
         echo "<br>";
 
 
