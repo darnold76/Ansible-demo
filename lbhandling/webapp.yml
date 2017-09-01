@@ -10,7 +10,7 @@
 # We target the web group to deploy our application
 - hosts: web
   vars:
-    http_port: 80
+    httpd_port: 80
     allow_override: None
   tasks:
 
