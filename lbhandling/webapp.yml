@@ -14,11 +14,13 @@
     allow_override: None
   tasks:
 
-    - name: Add our custom host in hostfile
-      lineinfile:
-        path: /etc/hosts
-        line: '172.217.9.46 google.com'
-        state: present
+    - name: Add our custom hostfile
+      template:
+        src: templates/hosts.j2
+        dest: /etc/hosts
+        owner: root
+        group: root
+        mode: 0644
 
     - name: Install Apache and mod_php
       yum:
