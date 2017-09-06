@@ -5,10 +5,12 @@
 
 # We want to gather information for the load balancers, so we can refer to it.
 - hosts: loadbalancer
+  name: Get loadbalancer info
   tasks: [] # Empty task list.
 
 # We target the web group to deploy our application
 - hosts: web
+  name: Set up and maintain Web App Setup
   vars:
     httpd_port: 80
     allow_override: None
