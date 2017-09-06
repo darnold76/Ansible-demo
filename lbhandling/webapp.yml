@@ -88,9 +88,31 @@
       service:
         name: firewalld
         state: reloaded
+        
+    - name: Drop out of Load Balancer
+      haproxy:
+        state: disabled
+        backend: web
+        host: "{{ ansible_hostname }}"
+        socket: /var/lib/haproxy/stats
+        wait: Yes
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups.loadbalancer }}"
+      listen: "restart app server"
 
     - name: Restart Apache
       service:
         name: httpd
         state: restarted
+      listen: "restart app server"
+      
+    - name: Add back into Load Balancer
+      haproxy:
+        state: enabled
+        backend: web
+        host: "{{ ansible_hostname }}"
+        socket: /var/lib/haproxy/stats
+        wait: Yes
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups.loadbalancer }}"
       listen: "restart app server"
