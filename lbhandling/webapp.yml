@@ -22,6 +22,17 @@
         group: root
         mode: 0644
 
+    - name: Install NTP
+      yum:
+        name: ntp
+        state: present
+
+    - name: Start NTP
+      service:
+        name: ntpd
+        state: started
+        enabled: Yes
+
     - name: Install Apache and mod_php
       yum:
         name: "{{ item }}"
