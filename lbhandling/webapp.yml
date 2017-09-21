@@ -105,3 +105,5 @@
         name: httpd
         state: restarted
       listen: "restart app server"
+
+# vim: ft=ansible
