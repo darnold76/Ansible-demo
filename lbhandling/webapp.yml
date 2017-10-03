@@ -106,14 +106,4 @@
         state: restarted
       listen: "restart app server"
 
-    - name: add back into Load Balancer
-      haproxy:
-        state: enabled
-        backend: web
-        host: "{{ ansible_hostname }}"
-        socket: /var/lib/haproxy/stats
-        wait: Yes
-      delegate_to: "{{ item }}"
-      with_items: "{{ groups.loadbalancer }}"
-      listen: "restart app server"
 # vim: ft=ansible
