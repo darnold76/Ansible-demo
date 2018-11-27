@@ -4,9 +4,10 @@
 # restarting Apache
 
 # We want to gather information for the load balancers, so we can refer to it.
+
 - hosts: loadbalancer
   name: Get loadbalancer info
-  tasks: [] # Empty task list.
+  tasks: []  # Empty task list.
 
 # We target the web group to deploy our application
 - hosts: web
@@ -33,7 +34,7 @@
       service:
         name: ntpd
         state: started
-        enabled: Yes
+        enabled: true
 
     - name: Install Apache and mod_php
       yum:
@@ -51,7 +52,7 @@
         group: root
         mode: 0644
       notify:
-          - restart app server
+        - restart app server
 
     - name: deploy simple index file
       template:
@@ -72,14 +73,14 @@
     - name: Get correct firewall rules in place
       firewalld:
         service: http
-        permanent: True
+        permanent: true
         state: enabled
       notify: firewall reload
 
     - name: Verify Apache is running.
       service:
         name: httpd
-        enabled: Yes
+        enabled: true
         state: started
 
   handlers:
@@ -95,7 +96,7 @@
         backend: web
         host: "{{ ansible_hostname }}"
         socket: /var/lib/haproxy/stats
-        wait: Yes
+        wait: true
       delegate_to: "{{ item }}"
       with_items: "{{ groups.loadbalancer }}"
       listen: "restart app server"
@@ -112,7 +113,7 @@
         backend: web
         host: "{{ ansible_hostname }}"
         socket: /var/lib/haproxy/stats
-        wait: Yes
+        wait: true
       delegate_to: "{{ item }}"
       with_items: "{{ groups.loadbalancer }}"
       listen: "restart app server"
