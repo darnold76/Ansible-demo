@@ -12,6 +12,7 @@
 # We target the web group to deploy our application
 - hosts: web
   name: Set up and maintain Web App Setup
+  serial: 1
   vars:
     httpd_port: 80
     allow_override: None
@@ -117,5 +118,3 @@
       delegate_to: "{{ item }}"
       with_items: "{{ groups.loadbalancer }}"
       listen: "restart app server"
-
-# vim: ft=ansible
